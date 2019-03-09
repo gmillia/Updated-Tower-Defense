@@ -12,8 +12,6 @@ var enemyCoolDown = 150;
 var maxEnemies = 25;
 var enemyCount = 0;
 
-//enemies[0] = new enemy();
-
 ct = new tower();
 towers[0] = ct;
 towers[0].x = 247;
@@ -24,25 +22,33 @@ towers[1] = nt;
 towers[1].x = 127;
 towers[1].y = 37;
 
+//Start the game: TODO -> Only when Start button is pressed
 draw();
 
+//"Game loop" -> draws everything
 function draw()
 {
     //draw map
     gameMap.draw(ctx, gameMap);
 
+    //add enemies: TODO -> clear array for the next wave
     addEnemies();
 
+    //Draw each enemy: TODO -> make a separate function (similar do drawTowers)
     for(var i = 0; i < enemies.length; i++)
     {
         enemies[i].draw(ctx);
         enemies[i].move();
     }
+
+    //draw towers -> duh
     drawTowers();
 
+    //Draw again -> TODO: check if pause button isn't pressed
     requestAnimationFrame(draw);
 }
 
+//Helper function to draw towers
 function drawTowers()
 {
     for(var i = 0; i < towers.length; i++)
@@ -52,7 +58,7 @@ function drawTowers()
     }
 }
 
-
+//Helper function to spawn enemies for each round
 function addEnemies()
 {
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)

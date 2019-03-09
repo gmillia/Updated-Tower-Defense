@@ -13,19 +13,6 @@ class tempTile
     }
 }
 
-Array.prototype.contains = function(x,y)
-{
-    var i = this.length;
-    while (i--) 
-    {
-        if (this[i][0] == x && this[i][1] == y) 
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 class enemy
 {
     constructor()
@@ -50,7 +37,6 @@ class enemy
 
     move()
     {
-      //tuple of new coords
        if(this.alive)
        {
            var move = this.findDirection(this.x, this.y)
