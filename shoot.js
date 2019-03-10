@@ -28,20 +28,23 @@ var towers = [];  //holds all towers placed on map
 var enemies = [];  //holds all enemies in the current wave
 var killed = [];  //holds all indexes of killed enemies
 
-var maxCool = 35;
+var maxCool = 35;  //max time wait between enemy spawns
 var enemyCoolDown = 0;  //ticks between each enemy appearance
 var maxEnemies = 25;  //enemy count for wave 1 (will be increased with each wave)
 var enemyCount = 0;  //current enemy count
-var pauseBetweenWaves = 500;
+var pauseBetweenWaves = 500;  //pause between waves
 
+//Display values
 var maxWaves = 10;
 var currWave = 1;
 var currMoney = 1000;
+var lives = 10;
 
-var towerSelected = true;  //button is selected
+var towerSelected = false;  //button is selected
 var towerRange = 1;  //radius of selected tower
 var towerColor = null;  //color of currently selected tower
-var objectType = null;
+var objectType = null;  //used to identify which tower to create on click
+var towerPrice = null;
 
 //Temporary objects
 var tempT1 = new TowerOne(-1,-1);
@@ -59,20 +62,22 @@ Handles tower selection and updates global vars (tower color, tower object type 
 */
 function chooseTower()
 {
+    towerSelected = true;
     if(this.id == "towerOne") 
     { 
         towerColor = tempT1.color; 
         objectType = 1; 
         towerRange = tempT1.range;
+        towerPrice = tempT1.price;
     }
     if(this.id == "towerTwo") 
     { 
         towerColor = tempT2.color; 
         objectType = 2;
         towerRange = tempT2.range;
+        towerPrice = tempT2.price;
     }
 }
-
 
 /*
 Function that handles mouse clicks (places objects on the canvas)
@@ -83,12 +88,22 @@ function handleMouseClick(evt)
     if(mouse.x != -1 && mouse.y != -1)
     {
         var selectedTile = gameMap.getTile(mouse.x, mouse.y);
+
         //If tile is free (can place stuff on it) AND selected is tower
         if(selectedTile.placable)
         {
-            var newTower = createObject();  //calls helper function to create a new tower
-            towers.push(newTower);          //adds tower to the tower list
-            selectedTile.placable = false;  //make tile non-placable
+            //TODO: change so that either tower info is displayed or tower is places
+
+            //Buy tower only if we have money for it
+            if(currMoney >= towerPrice)
+            {
+                var newTower = createObject();  //calls helper function to create a new tower
+                towers.push(newTower);          //adds tower to the tower list
+                selectedTile.placable = false;  //make tile non-placable
+                currMoney -= towerPrice;  //decrease amount of cash we have
+
+                displayMoney();  //display money we have
+            }
         }
     }
 }
@@ -212,13 +227,27 @@ function drawEnemies()
 
             //add money
             currMoney += enemies[i].reward;
-            document.getElementById('money').innerHTML = "Money: " + currMoney;
+            displayMoney();
         }
 
-        //move only if game is not paused
-        if(playing) enemies[i].move();
+        //Check if enemy reached final destination
+        if(enemies[i].x == 870 && enemies[i].y == 870 && enemies[i].alive)
+        {
+            enemies[i].alive = false;  //change enemy to dead
+            lives--;  //decrease lives left
+            displayLives();
 
-        //If we killed all enemies, clear killed and enemies list -> wave is over
+            //End of the game check
+            if(lives <= 0) 
+            {
+                playing = false;  //pause the game
+                alert("Game Over!");  //display end: TODO -> change to canvas displaying message
+            }
+        }
+        //move only if game is not paused
+        else if(playing) enemies[i].move();
+
+        //If we killed all enemies, clear killed and enemies list -> wave is over: TODO change to either killed or not killed
         if(killed.length == maxEnemies) 
         { 
             //clear lists
@@ -239,13 +268,13 @@ function drawMouse()
 }
 
 /*
-Helper function that adds enemies to the enemy list every N-ms
+Helper function that adds enemies to the enemy list every N-ms: TODO -> add random enemy selection
 */
 function addEnemies()
 {
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)
     {
-        enemies[enemyCount] = new FastStrongEnemy();
+        enemies[enemyCount] = new FastWeakEnemy();
         enemyCount++;
         enemyCoolDown = maxCool;
         enemyCoolDown--;
@@ -287,15 +316,47 @@ function nextWave()
             pauseBetweenWaves = 500;  //reset pause between waves
 
             //Display current wave
-            document.getElementById('wave').innerHTML = 'Wave: ' + currWave;
-            document.getElementById('nextWave').innerHTML = "Next Wave In: 0";
+            displayCurrWave();
+            displayNextWave(0);
         }
         else
         {
             pauseBetweenWaves--;  //reduce pause time till the next wave
             var timeLeft = Math.round(pauseBetweenWaves / 50);  //calculate approximate time until the next wave
-            document.getElementById('nextWave').innerHTML = "Next Wave In: " + timeLeft;  //display time left until next wave
+            displayNextWave(timeLeft);
         }
     }
+}
+
+/*
+Helper function that gets called when we need to display money
+*/
+function displayMoney()
+{
+    document.getElementById('money').innerHTML = "Money: " + currMoney;
+}
+
+/*
+Helper function that gets called when we need to display time left for the next wave
+*/
+function displayNextWave(timeLeft)
+{
+    document.getElementById('nextWave').innerHTML = "Next Wave In: " + timeLeft;  //display time left until next wave
+}
+
+/*
+Helper function that get called when we need to display current wave
+*/
+function displayCurrWave()
+{
+    document.getElementById('wave').innerHTML = 'Wave: ' + currWave;
+}
+
+/*
+Helper function that gets called when we need to display current lives
+*/
+function displayLives()
+{
+    document.getElementById('lives').innerHTML = "Lives: " + lives;  //display lives left
 }
 
