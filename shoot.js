@@ -28,13 +28,15 @@ var towers = [];  //holds all towers placed on map
 var enemies = [];  //holds all enemies in the current wave
 var killed = [];  //holds all indexes of killed enemies
 
-var maxCool = 15;
+var maxCool = 35;
 var enemyCoolDown = 0;  //ticks between each enemy appearance
 var maxEnemies = 25;  //enemy count for wave 1 (will be increased with each wave)
 var enemyCount = 0;  //current enemy count
 var pauseBetweenWaves = 500;
+
 var maxWaves = 10;
 var currWave = 1;
+var currMoney = 1000;
 
 var towerSelected = true;  //button is selected
 var towerRange = 1;  //radius of selected tower
@@ -204,13 +206,25 @@ function drawEnemies()
     {
         //If killed add to killed list, and don't draw
         if(enemies[i].alive) enemies[i].draw(ctx);
-        else if(!killed.includes(i)) killed.push(i);
+        else if(!killed.includes(i)) 
+        {
+            killed.push(i);
+
+            //add money
+            currMoney += enemies[i].reward;
+            document.getElementById('money').innerHTML = "Money: " + currMoney;
+        }
 
         //move only if game is not paused
         if(playing) enemies[i].move();
 
         //If we killed all enemies, clear killed and enemies list -> wave is over
-        if(killed.length == maxEnemies) { killed.length = 0; enemies.length = 0;}
+        if(killed.length == maxEnemies) 
+        { 
+            //clear lists
+            killed.length = 0; 
+            enemies.length = 0;
+        }
     }
 }
 
@@ -231,7 +245,7 @@ function addEnemies()
 {
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)
     {
-        enemies[enemyCount] = new FastWeakEnemy();
+        enemies[enemyCount] = new FastStrongEnemy();
         enemyCount++;
         enemyCoolDown = maxCool;
         enemyCoolDown--;
@@ -262,18 +276,26 @@ Helper function to reset values for the new wave
 */
 function nextWave()
 {
-    if(enemies.length == 0 && currWave <= 10)
+    if(enemies.length == 0 && currWave < 10)
     {
         if(pauseBetweenWaves <= 0)
         {
-            enemyCount = 0;
-            maxCool -= 1;
-            maxEnemies += 10;
-            currWave++;
-            pauseBetweenWaves = 500;
+            enemyCount = 0;  //reset current enemy count
+            maxCool -= 1;  //reduce wait time between enemy spawns
+            maxEnemies += 10;  //increase amount of enemies in each wave
+            currWave++;  //increase wave count
+            pauseBetweenWaves = 500;  //reset pause between waves
+
+            //Display current wave
+            document.getElementById('wave').innerHTML = 'Wave: ' + currWave;
+            document.getElementById('nextWave').innerHTML = "Next Wave In: 0";
         }
         else
-            pauseBetweenWaves--;
+        {
+            pauseBetweenWaves--;  //reduce pause time till the next wave
+            var timeLeft = Math.round(pauseBetweenWaves / 50);  //calculate approximate time until the next wave
+            document.getElementById('nextWave').innerHTML = "Next Wave In: " + timeLeft;  //display time left until next wave
+        }
     }
 }
 

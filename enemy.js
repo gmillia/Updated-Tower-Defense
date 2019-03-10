@@ -1,6 +1,6 @@
 class Enemy
 {
-    constructor(speed, color, health)
+    constructor(speed, color, health, reward)
     {
         this.x = 0;
         this.y = 0;
@@ -9,6 +9,7 @@ class Enemy
         this.color = color;
         this.alive = true;
         this.health = health;
+        this.reward = reward;
     }
 
     draw(ctx)
@@ -57,8 +58,8 @@ class FastWeakEnemy extends Enemy
 {
     constructor()
     {
-        //speed, color, health
-        super(30, 'brown', 500);
+        //speed, color, health, reward (per kill)
+        super(30, 'brown', 500, 50);
     }
 }
 
@@ -66,7 +67,25 @@ class SlowStrongEnemy extends Enemy
 {
     constructor()
     {
+        //speed, color, health, reward (per kill)
+        super(0.9, 'white', 4000, 100);
+    }
+}
+
+class SlowWeakEnemy extends Enemy
+{
+    constructor()
+    {
         //speed, color, health
-        super(0.9, 'white', 4000);
+        super(0.5, 'silver', 300, 100);
+    }
+}
+
+class FastStrongEnemy extends Enemy
+{
+    constructor()
+    {
+        //speed, color, health
+        super(1.5, 'purple', 5000, 250)
     }
 }
