@@ -1,3 +1,4 @@
+//grab canvas
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
@@ -12,57 +13,64 @@ canvas.addEventListener("mousemove", handleMouseMove);
 canvas.addEventListener("mouseout", handleMouseOut);
 canvas.addEventListener("click", handleMouseClick);
 
+//holds mouse x/y position
 var mouse = 
 {
     x: -1,  //position y
     y: -1,  //position y
 }
 
+//create map and load Map1 (level1)
 var gameMap = new map();
 gameMap.level1();
-//gameMap.draw(ctx, gameMap);
 
-var towers = [];
-var enemies = [];
-var eCoolDown = 50;
+var towers = [];  //holds all towers placed on map
+var enemies = [];  //holds all enemies in the current wave
+var killed = [];  //holds all indexes of killed enemies
 
-var enemyCoolDown = 150;
-var maxEnemies = 25;
-var enemyCount = 0;
+var enemyCoolDown = 150;  //ticks between each enemy appearance
+var maxEnemies = 25;  //enemy count for wave 1 (will be increased with each wave)
+var enemyCount = 0;  //current enemy count
 
 var towerSelected = true;  //button is selected
-var towerRad = 1;
-var towCol = null;
+var towerRange = 1;  //radius of selected tower
+var towerColor = null;  //color of currently selected tower
 var objectType = null;
+
+//Temporary objects
 var tempT1 = new TowerOne(-1,-1);
 var tempT2 = new TowerTwo(-1,-1);
-
 var tile = new Tile();
 
+//Game currently running/paused
 var playing = false;
 
+//START THE GAME
+draw();
+
 /*
-Handles tower selection
+Handles tower selection and updates global vars (tower color, tower object type etc)
 */
 function chooseTower()
 {
     if(this.id == "towerOne") 
     { 
-        towCol = tempT1.color; 
+        towerColor = tempT1.color; 
         objectType = 1; 
-        towerRad = tempT1.range;
+        towerRange = tempT1.range;
     }
     if(this.id == "towerTwo") 
     { 
-        towCol = tempT2.color; 
+        towerColor = tempT2.color; 
         objectType = 2;
-        towerRad = tempT2.range;
+        towerRange = tempT2.range;
     }
 }
 
 
 /*
 Function that handles mouse clicks (places objects on the canvas)
+TODO: when clicked on the tower give option to sell/upgrade
 */
 function handleMouseClick(evt)
 {
@@ -72,15 +80,15 @@ function handleMouseClick(evt)
         //If tile is free (can place stuff on it) AND selected is tower
         if(selectedTile.placable)
         {
-            var newTower = createObject();
-            towers.push(newTower);
-            selectedTile.placable = false;
+            var newTower = createObject();  //calls helper function to create a new tower
+            towers.push(newTower);          //adds tower to the tower list
+            selectedTile.placable = false;  //make tile non-placable
         }
     }
 }
 
 /*
-Helper function that creates a new selected tower
+Helper function that creates a new tower, by selecting tower that was clicked on last
 */
 function createObject()
 {
@@ -127,34 +135,64 @@ function getMousePos(canvas, evt)
 }
 
 
-//Start the game: TODO -> Only when Start button is pressed
+/*
+Sets playing to true -> game starts running (enemies start moving)
+*/
 function startGame()
 {
     playing = true;
-    //draw();
 }
 
-draw();
-
+/*
+Function that gets called when pause button is pressed -> enemies stop moving, but 
+can still place towers
+*/
 function pauseGame()
 {
     playing = false;
 }
 
-var deathCount = 0;
-var killed = [];
-//"Game loop" -> draws everything
+/*
+Function draws everything on the canvas (including the canvas) AND calculates everything else (either by calling objects funcs on by itself)
+*/
 function draw()
 {
     //draw map
     gameMap.draw(ctx, gameMap);
 
-    //add enemies: TODO -> clear array for the next wave
+    //add enemies:
     if(playing)
         addEnemies();
 
-    //Draw each enemy: TODO -> make a separate function (similar do drawTowers)
+    //Draw each enemy
+    drawEnemies();
 
+    //Draw each enemy
+    drawTowers();
+
+    //draw mouse
+    drawMouse();
+
+    requestAnimationFrame(draw);
+}
+
+/*
+Helper function that draws all the otwers
+*/
+function drawTowers()
+{
+    for(var i = 0; i < towers.length; i++)
+    {
+        towers[i].draw(ctx, enemies);
+        towers[i].coolDown--;
+    }
+}
+
+/*
+Helper function to draw all the enemies
+*/
+function drawEnemies()
+{
     for(var i = 0; i < enemies.length; i++)
     {
         //If killed add to killed list, and don't draw
@@ -167,31 +205,21 @@ function draw()
         //If we killed all enemies, clear killed and enemies list -> wave is over
         if(killed.length == maxEnemies) { killed.length = 0; enemies.length = 0;}
     }
+}
 
-    //draw towers -> duh
-    drawTowers();
-
+function drawMouse()
+{
     if(mouse.x != -1 && mouse.y != -1) 
     {
         drawRange();
-        ctx.fillStyle = towCol;  //Gets a color of the chosen tower
+        ctx.fillStyle = towerColor;  //Gets a color of the chosen tower
         ctx.fillRect(mouse.x*tile.size, mouse.y*tile.size, tile.size, tile.size);
     }
-
-    requestAnimationFrame(draw);
 }
 
-//Helper function to draw towers
-function drawTowers()
-{
-    for(var i = 0; i < towers.length; i++)
-    {
-        towers[i].draw(ctx, enemies);
-        towers[i].coolDown--;
-    }
-}
-
-//Helper function to spawn enemies for each round
+/*
+Helper function that adds enemies to the enemy list every N-ms
+*/
 function addEnemies()
 {
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)
@@ -212,9 +240,9 @@ function drawRange()
 {
     ctx.fillStyle = "rgba(27,27,238, 0.5)";
 
-    for(var i = -towerRad; i < towerRad + 1; i++)
+    for(var i = -towerRange; i < towerRange + 1; i++)
     {
-        for(var j = -towerRad; j < towerRad + 1; j++)
+        for(var j = -towerRange; j < towerRange + 1; j++)
         {
             ctx.fillRect((mouse.x + i) * tile.size, (mouse.y + j) * tile.size, tile.size, tile.size);
         }

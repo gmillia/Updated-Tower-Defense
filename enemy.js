@@ -66,6 +66,7 @@ class SlowStrongEnemy extends Enemy
 {
     constructor()
     {
+        //speed, color, health
         super(0.9, 'white', 4000);
     }
 }
