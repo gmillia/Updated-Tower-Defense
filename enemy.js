@@ -1,29 +1,14 @@
-class tempTile
+class Enemy
 {
-    constructor(x, y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    changeCoords(x,y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-class enemy
-{
-    constructor()
+    constructor(speed, color, health)
     {
         this.x = 0;
         this.y = 0;
         this.size = 30;
-        this.speed = 1.5;
-        this.color = "yellow";
+        this.speed = speed;
+        this.color = color;
         this.alive = true;
-        this.health = 1000;
+        this.health = health;
     }
 
     draw(ctx)
@@ -65,5 +50,22 @@ class enemy
         this.health -= dmg;
 
         if(this.health <= 0) this.alive = false;
+    }
+}
+
+class FastWeakEnemy extends Enemy
+{
+    constructor()
+    {
+        //speed, color, health
+        super(3, 'brown', 500);
+    }
+}
+
+class SlowStrongEnemy extends Enemy
+{
+    constructor()
+    {
+        super(0.9, 'white', 4000);
     }
 }

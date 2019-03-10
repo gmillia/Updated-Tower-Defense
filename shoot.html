@@ -1,9 +1,39 @@
 <html>
     <canvas id = "gameCanvas" height = 900 width = 900></canvas>
+
+    <button type="button" id="start">Start</button>
+    <button type="button" id="pause">Pause</button>
+    <button type="button" id="towerOne">Tower One</button>
+    <button type="button" id="towerTwo">Tower Two</button>
+
     <style>
         #gameCanvas
         {
             border: 1px solid red;
+        }
+        #start
+        {
+            position: absolute;
+            top: 8px;
+            left: 925px;
+        }
+        #pause
+        {
+            position: absolute;
+            top: 38px;
+            left: 925px;
+        }
+        #towerOne
+        {
+            position: absolute;
+            top: 68px;
+            left: 925px;
+        }
+        #towerTwo
+        {
+            position: absolute;
+            top: 98px;
+            left: 925px;
         }
     </style>
     <script src = "map.js"></script>
