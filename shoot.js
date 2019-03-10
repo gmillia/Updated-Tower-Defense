@@ -28,9 +28,13 @@ var towers = [];  //holds all towers placed on map
 var enemies = [];  //holds all enemies in the current wave
 var killed = [];  //holds all indexes of killed enemies
 
-var enemyCoolDown = 150;  //ticks between each enemy appearance
+var maxCool = 110;
+var enemyCoolDown = 0;  //ticks between each enemy appearance
 var maxEnemies = 25;  //enemy count for wave 1 (will be increased with each wave)
 var enemyCount = 0;  //current enemy count
+var pauseBetweenWaves = 500;
+var maxWaves = 10;
+var currWave = 1;
 
 var towerSelected = true;  //button is selected
 var towerRange = 1;  //radius of selected tower
@@ -161,7 +165,7 @@ function draw()
     gameMap.draw(ctx, gameMap);
 
     //add enemies:
-    if(playing)
+    if(playing && pauseBetweenWaves >= 500)
         addEnemies();
 
     //Draw each enemy
@@ -172,6 +176,9 @@ function draw()
 
     //draw mouse
     drawMouse();
+
+    if(playing)
+        nextWave();
 
     requestAnimationFrame(draw);
 }
@@ -226,7 +233,7 @@ function addEnemies()
     {
         enemies[enemyCount] = new FastWeakEnemy();
         enemyCount++;
-        enemyCoolDown = 150;
+        enemyCoolDown = maxCool;
     }
     else
         enemyCoolDown--;
@@ -246,6 +253,26 @@ function drawRange()
         {
             ctx.fillRect((mouse.x + i) * tile.size, (mouse.y + j) * tile.size, tile.size, tile.size);
         }
+    }
+}
+
+/*
+Helper function to reset values for the new wave
+*/
+function nextWave()
+{
+    if(enemies.length == 0 && currWave <= 10)
+    {
+        if(pauseBetweenWaves <= 0)
+        {
+            enemyCount = 0;
+            maxCool -= 10;
+            maxEnemies += 10;
+            currWave++;
+            pauseBetweenWaves = 500;
+        }
+        else
+            pauseBetweenWaves--;
     }
 }
 

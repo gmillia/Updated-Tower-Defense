@@ -58,7 +58,7 @@ class FastWeakEnemy extends Enemy
     constructor()
     {
         //speed, color, health
-        super(3, 'brown', 500);
+        super(30, 'brown', 500);
     }
 }
 
