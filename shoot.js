@@ -27,6 +27,7 @@ gameMap.level1();
 var towers = [];  //holds all towers placed on map
 var enemies = [];  //holds all enemies in the current wave
 var killed = [];  //holds all indexes of killed enemies
+var reachedEnd = [];  //holds all indexes of enemies that reached 
 
 var maxCool = 35;  //max time wait between enemy spawns
 var enemyCoolDown = 0;  //ticks between each enemy appearance
@@ -45,6 +46,9 @@ var towerRange = 1;  //radius of selected tower
 var towerColor = null;  //color of currently selected tower
 var objectType = null;  //used to identify which tower to create on click
 var towerPrice = null;
+var towerName = null;
+var towerDamage = null;
+
 
 //Temporary objects
 var tempT1 = new TowerOne(-1,-1);
@@ -62,13 +66,15 @@ Handles tower selection and updates global vars (tower color, tower object type 
 */
 function chooseTower()
 {
-    towerSelected = true;
+    towerSelected = true;  //for displaying tower and range when mouse over the canvas
     if(this.id == "towerOne") 
     { 
         towerColor = tempT1.color; 
         objectType = 1; 
         towerRange = tempT1.range;
         towerPrice = tempT1.price;
+        towerName = "Tower One";
+        towerDamage = tempT1.damage;
     }
     if(this.id == "towerTwo") 
     { 
@@ -76,7 +82,11 @@ function chooseTower()
         objectType = 2;
         towerRange = tempT2.range;
         towerPrice = tempT2.price;
+        towerName = "Tower Two";
+        towerDamage = tempT2.damage;
     }
+
+    displayTowerInfo();
 }
 
 /*
@@ -87,6 +97,7 @@ function handleMouseClick(evt)
 {
     if(mouse.x != -1 && mouse.y != -1)
     {
+        //Grab the tile on canvas where mouse was clicked
         var selectedTile = gameMap.getTile(mouse.x, mouse.y);
 
         //If tile is free (can place stuff on it) AND selected is tower
@@ -135,7 +146,8 @@ Finally, calls draw method.
 */
 function handleMouseMove(evt)
 {
-    if(towerSelected)  //
+    //Display tower and its range over the canvas only when tower is selected
+    if(towerSelected) 
     {
         var mousePos = getMousePos(canvas, evt);  //Returns tuple of mouse pos on canvas (x,y)
         mouse.x = Math.floor(mousePos.x/30);  //find associated X-tile
@@ -194,9 +206,11 @@ function draw()
     //draw mouse
     drawMouse();
 
+    //check if it's time for the next wave
     if(playing)
         nextWave();
 
+    //redraw again
     requestAnimationFrame(draw);
 }
 
@@ -221,9 +235,11 @@ function drawEnemies()
     {
         //If killed add to killed list, and don't draw
         if(enemies[i].alive) enemies[i].draw(ctx);
-        else if(!killed.includes(i)) 
+        else if(!killed.includes(i) && !reachedEnd.includes(i)) 
         {
             killed.push(i);
+
+            //reachedEnd.push(i);
 
             //add money
             currMoney += enemies[i].reward;
@@ -233,9 +249,10 @@ function drawEnemies()
         //Check if enemy reached final destination
         if(enemies[i].x == 870 && enemies[i].y == 870 && enemies[i].alive)
         {
-            enemies[i].alive = false;  //change enemy to dead
             lives--;  //decrease lives left
-            displayLives();
+            displayLives();  //Display lives left
+
+            reachedEnd.push(i);  //add enemies to the list of those that reached the end
 
             //End of the game check
             if(lives <= 0) 
@@ -247,12 +264,13 @@ function drawEnemies()
         //move only if game is not paused
         else if(playing) enemies[i].move();
 
-        //If we killed all enemies, clear killed and enemies list -> wave is over: TODO change to either killed or not killed
-        if(killed.length == maxEnemies) 
+        //If we killed all enemies, clear killed and enemies list -> wave is over
+        if((killed.length + reachedEnd.length) == maxEnemies) 
         { 
             //clear lists
             killed.length = 0; 
             enemies.length = 0;
+            reachedEnd.length = 0;
         }
     }
 }
@@ -358,5 +376,17 @@ Helper function that gets called when we need to display current lives
 function displayLives()
 {
     document.getElementById('lives').innerHTML = "Lives: " + lives;  //display lives left
+}
+
+/*
+Helper function to display tower info on the page
+*/
+function displayTowerInfo()
+{
+    document.getElementById("tower").innerHTML = "Tower: " + towerName;
+    document.getElementById("price").innerHTML = "Price: " + towerPrice;
+    document.getElementById("range").innerHTML = "Range: " + towerRange + " tiles";
+    document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
+    document.getElementById("towerInfo").style.display = "block";
 }
 

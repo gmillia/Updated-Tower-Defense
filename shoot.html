@@ -11,6 +11,13 @@
     <b id="nextWave">Next Wave In: 0</b>
     <b id="lives">Lives: 10</b>
 
+    <div id="towerInfo">
+        <b id="tower">Tower: </b><br>
+        <b id="price">Price: </b><br>
+        <b id="range">Range: </b><br>
+        <b id="damage">Damage: </b>
+    </div>
+
     <style>
         #gameCanvas
         {
@@ -63,6 +70,17 @@
             position: absolute;
             top: 218px;
             left: 925px;
+        }
+        #towerInfo
+        {
+            position: absolute;
+            top: 248px;
+            left: 925px;
+            display: none;
+
+            width: 235px;
+            height: 72px;
+            border: 1px solid red;
         }
     </style>
     <script src = "map.js"></script>
