@@ -46,7 +46,7 @@ class Tower
 
     inRange(enemy)
     {
-        if(enemy.x >= (this.x - (this.range + 1) * 30) && enemy.x <= (this.x + (this.range + 1) * 30) && enemy.y >= (this.y - (this.range + 1) * 30) && enemy.y <= (this.y + (this.range) * 30)) return true;
+        if(enemy.x >= (this.x - (this.range + 1) * 30) && enemy.x <= (this.x + (this.range) * 30) && enemy.y >= (this.y - (this.range + 1) * 30) && enemy.y <= (this.y + (this.range) * 30)) return true;
         else return false;
     }
 }

@@ -95,16 +95,35 @@ TODO: when clicked on the tower give option to sell/upgrade
 */
 function handleMouseClick(evt)
 {
-    if(mouse.x != -1 && mouse.y != -1)
+    if(mouse.x != -1 && mouse.y != -1 && !towerSelected)
     {
         //Grab the tile on canvas where mouse was clicked
         var selectedTile = gameMap.getTile(mouse.x, mouse.y);
+        //Is the tower on the tile?
+        var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
+
+        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
+        if(!selectedTile.placable && selectedIsTower != null)
+        {
+            //console.log(111);
+            //displaySellInfo();
+            console.log(selectedTile.x, selectedTile.y, selectedIsTower);
+        }
+    }
+    else if(mouse.x != -1 && mouse.y != -1 && towerSelected)
+    {
+        //Grab the tile on canvas where mouse was clicked
+        var selectedTile = gameMap.getTile(mouse.x, mouse.y);
+        //Is the tower on the tile?
+        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
+
+        //console.log(selectedTile.x, selectedTile.y);
+        //console.log(mouse.x, mouse.y);
 
         //If tile is free (can place stuff on it) AND selected is tower
         if(selectedTile.placable)
         {
-            //TODO: change so that either tower info is displayed or tower is places
-
+            //TODO: change so that either tower info is displayed or tower is place
             //Buy tower only if we have money for it
             if(currMoney >= towerPrice)
             {
@@ -114,9 +133,32 @@ function handleMouseClick(evt)
                 currMoney -= towerPrice;  //decrease amount of cash we have
 
                 displayMoney();  //display money we have
+                towerSelected = false;
             }
         }
+        /*
+        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
+        else if(!selectedTile.placable && selectedIsTower != null)
+        {
+            //console.log(111);
+            //displaySellInfo();
+            console.log(selectedTile.x, selectedTile.y, selectedIsTower);
+        }
+        */
     }
+}
+
+/*
+Helper function that returns tower (if selcted tile includes tower) OR null
+*/
+function tileIsTower(x, y)
+{
+    for(var i = 0; i < towers.length; i++)
+    {
+        if(towers[i].x == x && towers[i].y == y)
+            return towers[i];
+    }
+    return null;
 }
 
 /*
@@ -233,13 +275,12 @@ function drawEnemies()
 {
     for(var i = 0; i < enemies.length; i++)
     {
-        //If killed add to killed list, and don't draw
+        //If enemy is alive -> draw it
         if(enemies[i].alive) enemies[i].draw(ctx);
+        //Else if enemy is not on the killed list AND it's not alive AND hasn't reached the end
         else if(!killed.includes(i) && !reachedEnd.includes(i)) 
         {
-            killed.push(i);
-
-            //reachedEnd.push(i);
+            killed.push(i);  //add to the killed list
 
             //add money
             currMoney += enemies[i].reward;
@@ -247,7 +288,7 @@ function drawEnemies()
         }
 
         //Check if enemy reached final destination
-        if(enemies[i].x == 870 && enemies[i].y == 870 && enemies[i].alive)
+        if(enemies[i].x == 870 && enemies[i].y == 870 && enemies[i].alive && !reachedEnd.includes(i))
         {
             lives--;  //decrease lives left
             displayLives();  //Display lives left
@@ -258,7 +299,6 @@ function drawEnemies()
             if(lives <= 0) 
             {
                 playing = false;  //pause the game
-                alert("Game Over!");  //display end: TODO -> change to canvas displaying message
             }
         }
         //move only if game is not paused
@@ -307,13 +347,16 @@ Arc (range circle) is being centered at the center of the tile mouse is currentl
 */
 function drawRange()
 {
-    ctx.fillStyle = "rgba(27,27,238, 0.5)";
-
-    for(var i = -towerRange; i < towerRange + 1; i++)
+    if(towerSelected)
     {
-        for(var j = -towerRange; j < towerRange + 1; j++)
+        ctx.fillStyle = "rgba(27,27,238, 0.5)";
+
+        for(var i = -towerRange; i < towerRange + 1; i++)
         {
-            ctx.fillRect((mouse.x + i) * tile.size, (mouse.y + j) * tile.size, tile.size, tile.size);
+            for(var j = -towerRange; j < towerRange + 1; j++)
+            {
+                ctx.fillRect((mouse.x + i) * tile.size, (mouse.y + j) * tile.size, tile.size, tile.size);
+            }
         }
     }
 }
@@ -387,6 +430,17 @@ function displayTowerInfo()
     document.getElementById("price").innerHTML = "Price: " + towerPrice;
     document.getElementById("range").innerHTML = "Range: " + towerRange + " tiles";
     document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
+    document.getElementById('sell').style.display = "none";
+    document.getElementById("towerInfo").style.display = "block";
+}
+
+function displaySellInfo()
+{
+    document.getElementById("tower").innerHTML = "Tower: " + towerName;
+    document.getElementById("price").innerHTML = "Price: " + towerPrice;
+    document.getElementById("range").innerHTML = "Range: " + towerRange + " tiles";
+    document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
+    document.getElementById('sell').style.display = "block";
     document.getElementById("towerInfo").style.display = "block";
 }
 
