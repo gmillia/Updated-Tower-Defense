@@ -215,7 +215,12 @@ Sets playing to true -> game starts running (enemies start moving)
 */
 function startGame()
 {
-    playing = true;
+    //If we haven't died yet
+    if(lives > 0)
+        playing = true;
+    //else restart
+    else
+        window.location.reload();
 }
 
 /*
