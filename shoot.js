@@ -7,6 +7,7 @@ document.getElementById("start").addEventListener("click", startGame, false);
 document.getElementById("pause").addEventListener("click", pauseGame, false);
 document.getElementById("towerOne").addEventListener("click", chooseTower, false);
 document.getElementById("towerTwo").addEventListener("click", chooseTower, false);
+document.getElementById("sell").addEventListener("click", sellTower, false);
 
 //Canvas Events
 canvas.addEventListener("mousemove", handleMouseMove);
@@ -456,5 +457,10 @@ function displaySellInfo()
 function displayRemainingEnemies()
 {
     document.getElementById("remaining").innerHTML = "Remaining Enemies: " + (maxEnemies - enemyCount) + "/" + maxEnemies;
+}
+
+function sellTower()
+{
+    console.log("selling");
 }
 
