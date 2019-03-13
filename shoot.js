@@ -279,6 +279,7 @@ Helper function to draw all the enemies
 */
 function drawEnemies()
 {
+    displayRemainingEnemies();
     for(var i = 0; i < enemies.length; i++)
     {
         //If enemy is alive -> draw it
@@ -304,6 +305,7 @@ function drawEnemies()
             //End of the game check
             if(lives <= 0) 
             {
+                document.getElementById("start").innerHTML = "Restart";  //Rename the start button to Restart
                 playing = false;  //pause the game
             }
         }
@@ -449,5 +451,10 @@ function displaySellInfo()
     document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
     document.getElementById('sell').style.display = "block";
     document.getElementById("towerInfo").style.display = "block";
+}
+
+function displayRemainingEnemies()
+{
+    document.getElementById("remaining").innerHTML = "Remaining Enemies: " + (maxEnemies - enemyCount) + "/" + maxEnemies;
 }
 
