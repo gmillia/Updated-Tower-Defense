@@ -34,6 +34,7 @@ var enemyCoolDown = 0;  //ticks between each enemy appearance
 var maxEnemies = 25;  //enemy count for wave 1 (will be increased with each wave)
 var enemyCount = 0;  //current enemy count
 var pauseBetweenWaves = 500;  //pause between waves
+var minWait = maxCool;
 
 //Display values
 var maxWaves = 10;
@@ -310,12 +311,13 @@ function drawEnemies()
         else if(playing) enemies[i].move();
 
         //If we killed all enemies, clear killed and enemies list -> wave is over
-        if((killed.length + reachedEnd.length) == maxEnemies) 
+        if((killed.length + reachedEnd.length) >= maxEnemies) 
         { 
             //clear lists
             killed.length = 0; 
             enemies.length = 0;
             reachedEnd.length = 0;
+            enemyCount = 0;
         }
     }
 }
@@ -371,7 +373,7 @@ Helper function to reset values for the new wave
 */
 function nextWave()
 {
-    if(enemies.length == 0 && currWave < 10)
+    if(enemies.length == 0 && currWave < 10 && enemyCoolDown == 0)
     {
         if(pauseBetweenWaves <= 0)
         {
