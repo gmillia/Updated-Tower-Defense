@@ -93,9 +93,13 @@ function chooseTower()
 /*
 Function that handles mouse clicks (places objects on the canvas)
 TODO: when clicked on the tower give option to sell/upgrade
+
+!!!Current issue, mouse move records position only when tower is selected -> therefore coords of the mouse stay old!!!
+->Issue seems to be fixed ATM
 */
 function handleMouseClick(evt)
 {
+    //Case 1: Clicking on the canvas without "dragging" tower on it
     if(mouse.x != -1 && mouse.y != -1 && !towerSelected)
     {
         //Grab the tile on canvas where mouse was clicked
@@ -103,28 +107,21 @@ function handleMouseClick(evt)
         //Is the tower on the tile?
         var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
 
-        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
         if(!selectedTile.placable && selectedIsTower != null)
         {
-            //console.log(111);
-            //displaySellInfo();
-            console.log(selectedTile.x, selectedTile.y, selectedIsTower);
+            //Case: Display the sell option in the info box
+            displaySellInfo();
         }
     }
+    //Case 2: tower is selcted (is dragging with the mouse)
     else if(mouse.x != -1 && mouse.y != -1 && towerSelected)
     {
         //Grab the tile on canvas where mouse was clicked
         var selectedTile = gameMap.getTile(mouse.x, mouse.y);
-        //Is the tower on the tile?
-        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
-
-        //console.log(selectedTile.x, selectedTile.y);
-        //console.log(mouse.x, mouse.y);
 
         //If tile is free (can place stuff on it) AND selected is tower
         if(selectedTile.placable)
         {
-            //TODO: change so that either tower info is displayed or tower is place
             //Buy tower only if we have money for it
             if(currMoney >= towerPrice)
             {
@@ -137,20 +134,11 @@ function handleMouseClick(evt)
                 towerSelected = false;
             }
         }
-        /*
-        //var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
-        else if(!selectedTile.placable && selectedIsTower != null)
-        {
-            //console.log(111);
-            //displaySellInfo();
-            console.log(selectedTile.x, selectedTile.y, selectedIsTower);
-        }
-        */
     }
 }
 
 /*
-Helper function that returns tower (if selcted tile includes tower) OR null
+Helper function that returns tower (if selected tile includes tower) OR null
 */
 function tileIsTower(x, y)
 {
@@ -190,12 +178,18 @@ Finally, calls draw method.
 function handleMouseMove(evt)
 {
     //Display tower and its range over the canvas only when tower is selected
+    /*
     if(towerSelected) 
     {
         var mousePos = getMousePos(canvas, evt);  //Returns tuple of mouse pos on canvas (x,y)
         mouse.x = Math.floor(mousePos.x/30);  //find associated X-tile
         mouse.y = Math.floor(mousePos.y/30);  //find associated Y-tile
     }
+    */
+
+    var mousePos = getMousePos(canvas, evt);  //Returns tuple of mouse pos on canvas (x,y)
+    mouse.x = Math.floor(mousePos.x/30);  //find associated X-tile
+    mouse.y = Math.floor(mousePos.y/30);  //find associated Y-tile
 }
 
 /*
@@ -324,13 +318,19 @@ function drawEnemies()
     }
 }
 
+/*
+Helper function that draws the tower and its range over the canvas (when tower is chosen)
+*/
 function drawMouse()
 {
     if(mouse.x != -1 && mouse.y != -1) 
     {
-        drawRange();
-        ctx.fillStyle = towerColor;  //Gets a color of the chosen tower
-        ctx.fillRect(mouse.x*tile.size, mouse.y*tile.size, tile.size, tile.size);
+        if(towerSelected)
+        {
+            drawRange();
+            ctx.fillStyle = towerColor;  //Gets a color of the chosen tower
+            ctx.fillRect(mouse.x*tile.size, mouse.y*tile.size, tile.size, tile.size);
+        }
     }
 }
 
