@@ -1,6 +1,6 @@
 class Tower
 {
-    constructor(x, y, fireRate, coolDown, color, range, price, damage)
+    constructor(x, y, fireRate, coolDown, color, range, price, damage, name)
     {
         this.x = x;
         this.y = y;
@@ -11,6 +11,7 @@ class Tower
         this.range = range;
         this.price = price;
         this.damage = damage;
+        this.name = name;
     }
 
     draw(ctx, enemies)
@@ -56,7 +57,7 @@ class TowerOne extends Tower
     constructor(x,y)
     {
         //x, y, fireRate, coolDown, range, price, damage
-        super(x, y, 50, 0, "blue", 1, 25, 150);
+        super(x, y, 50, 0, "blue", 1, 25, 150, "Tower One");
     }
 }
 
@@ -65,6 +66,6 @@ class TowerTwo extends Tower
     constructor(x,y)
     {
         //x, y, fireRate, coolDown, range, price, damage
-        super(x, y, 30, 0, "orange", 2, 50, 250);
+        super(x, y, 30, 0, "orange", 2, 50, 250, "Tower Two");
     }
 }

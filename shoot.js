@@ -56,6 +56,7 @@ var towerDamage = null;
 var tempT1 = new TowerOne(-1,-1);
 var tempT2 = new TowerTwo(-1,-1);
 var tile = new Tile();
+var towerIndex = {index: null, tower: null };  //used when we want to sell the tower
 
 //Game currently running/paused
 var playing = false;
@@ -92,6 +93,34 @@ function chooseTower()
 }
 
 /*
+Helper "overloaded" function that updates the display-box info
+*/
+function ChooseTower(tower)
+{
+    //towerSelected = true;  //for displaying tower and range when mouse over the canvas
+    if(tower.name == "Tower One") 
+    { 
+        //towerColor = tempT1.color; 
+        //objectType = 1; 
+        towerRange = tempT1.range;
+        towerPrice = tempT1.price;
+        towerName = "Tower One";
+        towerDamage = tempT1.damage;
+    }
+    if(tower.name == "Tower Two") 
+    { 
+        //towerColor = tempT2.color; 
+        //objectType = 2;
+        towerRange = tempT2.range;
+        towerPrice = tempT2.price;
+        towerName = "Tower Two";
+        towerDamage = tempT2.damage;
+    }
+
+    displayTowerInfo();   
+}
+
+/*
 Function that handles mouse clicks (places objects on the canvas)
 TODO: when clicked on the tower give option to sell/upgrade
 
@@ -105,12 +134,17 @@ function handleMouseClick(evt)
     {
         //Grab the tile on canvas where mouse was clicked
         var selectedTile = gameMap.getTile(mouse.x, mouse.y);
+
         //Is the tower on the tile?
         var selectedIsTower = tileIsTower(selectedTile.x, selectedTile.y);
 
-        if(!selectedTile.placable && selectedIsTower != null)
+        //Update the display info
+        ChooseTower(selectedIsTower.tower);
+
+        //If tile isn't placable (might remove) and tile holds tower
+        if(!selectedTile.placable && selectedIsTower.tower != null)
         {
-            //Case: Display the sell option in the info box
+            //Case: Displays the sell option in the info box
             displaySellInfo();
         }
     }
@@ -146,7 +180,10 @@ function tileIsTower(x, y)
     for(var i = 0; i < towers.length; i++)
     {
         if(towers[i].x == x && towers[i].y == y)
-            return towers[i];
+        {
+            towerIndex = {index: i, tower: towers[i]};
+            return towerIndex;
+        }
     }
     return null;
 }
@@ -253,6 +290,8 @@ function draw()
     if(playing)
         nextWave();
 
+    displayMoney();
+
     //redraw again
     requestAnimationFrame(draw);
 }
@@ -286,7 +325,7 @@ function drawEnemies()
 
             //add money
             currMoney += enemies[i].reward;
-            displayMoney();
+            //displayMoney();
         }
 
         //Check if enemy reached final destination
@@ -454,13 +493,28 @@ function displaySellInfo()
     document.getElementById("towerInfo").style.display = "block";
 }
 
+/*
+Helper function that shows enemies remaining in the wave
+*/
 function displayRemainingEnemies()
 {
     document.getElementById("remaining").innerHTML = "Remaining Enemies: " + (maxEnemies - enemyCount) + "/" + maxEnemies;
 }
 
+/*
+Function that gets called when Sell button is clicked:
+Removes tower from the towers list
+TODO: Recolor the tile and return the money (half the money)
+*/
 function sellTower()
 {
-    console.log("selling");
+    //Remove tower from the list
+    towers.splice(towerIndex.index, 1);
+
+    //Make tile available again
+    gameMap.getTile(towerIndex.tower.x/30, towerIndex.tower.y/30).placable = true;
+
+    //return half the money
+    currMoney += Math.floor(towerPrice/2);
 }
 
