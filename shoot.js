@@ -349,7 +349,6 @@ function drawEnemies()
             killed.length = 0; 
             enemies.length = 0;
             reachedEnd.length = 0;
-            //enemyCount = 0;
         }
     }
 }
