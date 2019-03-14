@@ -1,3 +1,17 @@
+/*
+Illia Shershun - Personal "fun" project
+
+Next:
+1) Decrease the map (maybe 450x450) OR decrease to the point it fits the size of the laptop (for now)
+2) Make the logic for spawning enemies depending on the enemies speed
+3) Make enemies spawn into different lists -> this way we can have multiple enemies per wave 
+   OR
+   Make random enemies in each wave after 3-4 wave
+4) Restyle the buttons and put them into different sides of the map
+5) Add images for the towers and enemies
+6) Possibly add an image over the canvas with the path, and hardcode the path to follow images path
+*/
+
 //grab canvas
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
