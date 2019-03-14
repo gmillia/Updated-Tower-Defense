@@ -51,7 +51,6 @@ var towerPrice = null;
 var towerName = null;
 var towerDamage = null;
 
-
 //Temporary objects
 var tempT1 = new TowerOne(-1,-1);
 var tempT2 = new TowerTwo(-1,-1);
@@ -97,11 +96,8 @@ Helper "overloaded" function that updates the display-box info
 */
 function ChooseTower(tower)
 {
-    //towerSelected = true;  //for displaying tower and range when mouse over the canvas
     if(tower.name == "Tower One") 
     { 
-        //towerColor = tempT1.color; 
-        //objectType = 1; 
         towerRange = tempT1.range;
         towerPrice = tempT1.price;
         towerName = "Tower One";
@@ -109,8 +105,6 @@ function ChooseTower(tower)
     }
     if(tower.name == "Tower Two") 
     { 
-        //towerColor = tempT2.color; 
-        //objectType = 2;
         towerRange = tempT2.range;
         towerPrice = tempT2.price;
         towerName = "Tower Two";
@@ -122,10 +116,7 @@ function ChooseTower(tower)
 
 /*
 Function that handles mouse clicks (places objects on the canvas)
-TODO: when clicked on the tower give option to sell/upgrade
-
-!!!Current issue, mouse move records position only when tower is selected -> therefore coords of the mouse stay old!!!
-->Issue seems to be fixed ATM
+TODO: Possibly make a separate function for each case
 */
 function handleMouseClick(evt)
 {
@@ -215,16 +206,6 @@ Finally, calls draw method.
 */
 function handleMouseMove(evt)
 {
-    //Display tower and its range over the canvas only when tower is selected
-    /*
-    if(towerSelected) 
-    {
-        var mousePos = getMousePos(canvas, evt);  //Returns tuple of mouse pos on canvas (x,y)
-        mouse.x = Math.floor(mousePos.x/30);  //find associated X-tile
-        mouse.y = Math.floor(mousePos.y/30);  //find associated Y-tile
-    }
-    */
-
     var mousePos = getMousePos(canvas, evt);  //Returns tuple of mouse pos on canvas (x,y)
     mouse.x = Math.floor(mousePos.x/30);  //find associated X-tile
     mouse.y = Math.floor(mousePos.y/30);  //find associated Y-tile
