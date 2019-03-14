@@ -479,6 +479,9 @@ function displayTowerInfo()
     document.getElementById("towerInfo").style.display = "block";
 }
 
+/*
+Helper function to display tower info WITH the sell button (once tower is pressed)
+*/
 function displaySellInfo()
 {
     document.getElementById("tower").innerHTML = "Tower: " + towerName;
@@ -513,6 +516,7 @@ function sellTower()
     //return half the money
     currMoney += Math.floor(towerPrice/2);
 
+    //Don't show tower info
     document.getElementById("towerInfo").style.display = "none";
 }
 
