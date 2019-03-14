@@ -290,6 +290,7 @@ function draw()
     if(playing)
         nextWave();
 
+    //Display money -> updates every turn
     displayMoney();
 
     //redraw again
@@ -516,5 +517,7 @@ function sellTower()
 
     //return half the money
     currMoney += Math.floor(towerPrice/2);
+
+    document.getElementById("towerInfo").style.display = "none";
 }
 
