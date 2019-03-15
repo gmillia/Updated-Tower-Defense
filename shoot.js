@@ -3,6 +3,8 @@ Illia Shershun - Personal "fun" project
 
 Next:
 1) Decrease the map (maybe 450x450) OR decrease to the point it fits the size of the laptop (for now)
+DONE: Decreased to 450x900
+TODO: Possibly decrease the tile size to fit more enemies/towers;
 2) Make the logic for spawning enemies depending on the enemies speed
 3) Make enemies spawn into different lists -> this way we can have multiple enemies per wave 
    OR
@@ -10,6 +12,8 @@ Next:
 4) Restyle the buttons and put them into different sides of the map
 5) Add images for the towers and enemies
 6) Possibly add an image over the canvas with the path, and hardcode the path to follow images path
+7) Wait time for the next wave in seconds (not calls to the draw method)
+8) Add health bar for each enemy
 */
 
 //grab canvas
@@ -52,18 +56,18 @@ var pauseBetweenWaves = 500;  //pause between waves
 var minWait = maxCool;
 
 //Display values
-var maxWaves = 10;
-var currWave = 1;
-var currMoney = 1000;
-var lives = 10;
+var maxWaves = 10;  //NOT display value, but current max waves in the game
+var currWave = 1;  //Holds value for the current wave (start with 1 = level 1)
+var currMoney = 1000;  //Holds value for the money currently available -> TODO: change to appropriate start value
+var lives = 10;  //Holds value for the lives player has left -> TODO: possibly increase
 
 var towerSelected = false;  //button is selected
 var towerRange = 1;  //radius of selected tower
 var towerColor = null;  //color of currently selected tower
 var objectType = null;  //used to identify which tower to create on click
-var towerPrice = null;
-var towerName = null;
-var towerDamage = null;
+var towerPrice = null;  //used to display tower price in the tower display box
+var towerName = null;  //used to display tower name in the tower display box
+var towerDamage = null;  //used to display tower damage per hit in the tower display box
 
 //Temporary objects
 var tempT1 = new TowerOne(-1,-1);
@@ -102,6 +106,7 @@ function chooseTower()
         towerDamage = tempT2.damage;
     }
 
+    //Display chosen tower info in the tower display box
     displayTowerInfo();
 }
 
@@ -125,6 +130,7 @@ function ChooseTower(tower)
         towerDamage = tempT2.damage;
     }
 
+    //Display tower info in the tower display box
     displayTowerInfo();   
 }
 
@@ -171,7 +177,7 @@ function handleMouseClick(evt)
                 currMoney -= towerPrice;  //decrease amount of cash we have
 
                 displayMoney();  //display money we have
-                towerSelected = false;
+                towerSelected = false;  //tower is placed on the canvas/map, deselect it (so that user can select a new one)
             }
         }
     }
@@ -182,14 +188,16 @@ Helper function that returns tower (if selected tile includes tower) OR null
 */
 function tileIsTower(x, y)
 {
+    //Case 1: Tower is on the canvas/map 
     for(var i = 0; i < towers.length; i++)
     {
         if(towers[i].x == x && towers[i].y == y)
         {
-            towerIndex = {index: i, tower: towers[i]};
-            return towerIndex;
+            towerIndex = {index: i, tower: towers[i]};  
+            return towerIndex;  //return tuple of tower index and tower
         }
     }
+    //Case 2: Selected tile isn't a tower -> return null
     return null;
 }
 
@@ -309,7 +317,10 @@ Helper function to draw all the enemies
 */
 function drawEnemies()
 {
+    //Display enemies remaining in the wave
     displayRemainingEnemies();
+
+    //Draw each enemy in the enemies list
     for(var i = 0; i < enemies.length; i++)
     {
         //If enemy is alive -> draw it
@@ -321,11 +332,10 @@ function drawEnemies()
 
             //add money
             currMoney += enemies[i].reward;
-            //displayMoney();
         }
 
         //Check if enemy reached final destination
-        if(enemies[i].x == 870 && enemies[i].y == 870 && enemies[i].alive && !reachedEnd.includes(i))
+        if(enemies[i].x == 0 && enemies[i].y == 420 && enemies[i].alive && !reachedEnd.includes(i))
         {
             lives--;  //decrease lives left
             displayLives();  //Display lives left
@@ -358,13 +368,15 @@ Helper function that draws the tower and its range over the canvas (when tower i
 */
 function drawMouse()
 {
+    //If mouse is on the/points over the canvas/map -> draw it
     if(mouse.x != -1 && mouse.y != -1) 
     {
+        //Tower is currenlty selected -> otherwise we don't draw the tower
         if(towerSelected)
         {
-            drawRange();
+            drawRange();  //draw range of the tower
             ctx.fillStyle = towerColor;  //Gets a color of the chosen tower
-            ctx.fillRect(mouse.x*tile.size, mouse.y*tile.size, tile.size, tile.size);
+            ctx.fillRect(mouse.x*tile.size, mouse.y*tile.size, tile.size, tile.size);  //draw tower over the range (to not mix the colors)
         }
     }
 }
@@ -374,27 +386,33 @@ Helper function that adds enemies to the enemy list every N-ms: TODO -> add rand
 */
 function addEnemies()
 {
+    //Case 1: Time to spawn enemy
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)
     {
-        enemies[enemyCount] = new FastWeakEnemy();
-        enemyCount++;
-        enemyCoolDown = maxCool;
-        enemyCoolDown--;
+        enemies[enemyCount] = new FastWeakEnemy();  //TODO -> change so that random enemies are spawned each turn
+        enemyCount++;  //increase current enemy count
+        enemyCoolDown = maxCool;  //reset current coolDown
+        enemyCoolDown--;  //decrease enemyCoolDOwn by 1 each call
     }
+    //Case 2: Not time to spawn enemy -> decrease wait time for the next enemy spawn
     else
         enemyCoolDown--;
 }
 
 /*
 Helper function that draws range of the tower.
-Arc (range circle) is being centered at the center of the tile mouse is currently at.
+Square is being centered at the center of the tile mouse is currently at.
 */
 function drawRange()
 {
+    //Tower is currently selected
     if(towerSelected)
     {
+        //Currently blue color for range with opacity 0.5
+        //TODO -> switch color of the range based on whether we are currently on the placable tile
         ctx.fillStyle = "rgba(27,27,238, 0.5)";
 
+        //Find appropriate tiles (next to tower) that are in range and draw range over them (with opacity)
         for(var i = -towerRange; i < towerRange + 1; i++)
         {
             for(var j = -towerRange; j < towerRange + 1; j++)
@@ -410,8 +428,9 @@ Helper function to reset values for the new wave
 */
 function nextWave()
 {
-    if(enemies.length == 0 && currWave < 10 && enemyCoolDown == 0)
+    if(enemies.length == 0 && currWave < 10 )//&& enemyCoolDown == 0)
     {
+        //Case 1: Wave is over -> time to start new wave -> reset the values and display 0 for the wait time (next wave)
         if(pauseBetweenWaves <= 0)
         {
             enemyCount = 0;  //reset current enemy count
@@ -422,13 +441,14 @@ function nextWave()
 
             //Display current wave
             displayCurrWave();
+            //Display wait time for the next wave -> 0 because it's current wave
             displayNextWave(0);
         }
         else
         {
             pauseBetweenWaves--;  //reduce pause time till the next wave
             var timeLeft = Math.round(pauseBetweenWaves / 50);  //calculate approximate time until the next wave
-            displayNextWave(timeLeft);
+            displayNextWave(timeLeft);  //Display time left for the next wave
         }
     }
 }

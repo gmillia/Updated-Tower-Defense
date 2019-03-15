@@ -1,3 +1,7 @@
+/*
+Class that represents each individual enemy -> used as an "abstract" class to create actual different kind of enemies
+Contains functions used for each kind of enemy
+*/
 class Enemy
 {
     constructor(speed, color, health, reward)
@@ -12,6 +16,9 @@ class Enemy
         this.reward = reward;
     }
 
+    /*
+    Helper function that draws the enemy
+    */
     draw(ctx)
     {
         if(this.alive)
@@ -21,6 +28,10 @@ class Enemy
         }
     }
 
+    /*
+    Helper function that moves the enemy to new (x,y) coordinates 
+    ->Calls helper function to determine next valid move (up/down, left/right)
+    */
     move()
     {
        if(this.alive)
@@ -34,6 +45,11 @@ class Enemy
        }
     }
 
+    /*
+    Helper function that gets called when enemy attempts to move
+    Determines next valid move.
+    TODO: possibly have different findDirection functions for different maps
+    */
     findDirection(x,y)
     {
         //Move to the right
@@ -46,6 +62,10 @@ class Enemy
         if(x > 0 && (y == 60 || y == 120 || y == 180 || y == 300 || y == 420 || y == 540 || y == 660 || y == 780 || y == 800)) return [x - this.speed, y];
     }
 
+    /*
+    Helper function that gets called from the Game.js (main game file) when enemy is hit from the tower
+    Decreases enemy health
+    */
     damage(dmg)
     {
         this.health -= dmg;
@@ -54,6 +74,9 @@ class Enemy
     }
 }
 
+/*
+New enemy type -> Fast and Weak
+*/
 class FastWeakEnemy extends Enemy
 {
     constructor()
@@ -63,6 +86,9 @@ class FastWeakEnemy extends Enemy
     }
 }
 
+/*
+New enemy type -> Slow and Strong
+*/
 class SlowStrongEnemy extends Enemy
 {
     constructor()
@@ -72,6 +98,9 @@ class SlowStrongEnemy extends Enemy
     }
 }
 
+/*
+New enemy type -> Slow and Weak
+*/
 class SlowWeakEnemy extends Enemy
 {
     constructor()
@@ -81,6 +110,9 @@ class SlowWeakEnemy extends Enemy
     }
 }
 
+/*
+New enemy type -> Fast and strong
+*/
 class FastStrongEnemy extends Enemy
 {
     constructor()

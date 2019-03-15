@@ -1,3 +1,6 @@
+/*
+Tile class used in the creation of the map (holds info about each individual tile)
+*/
 class Tile
 {
     constructor(x, y)
@@ -9,16 +12,24 @@ class Tile
     }
 }
 
+/*
+Map class -> holds info about the current map
+TODO -> rename to Map
+*/
 class map
 {
     constructor()
     {
         this.canvas = [];
         this.cols = 30;
-        this.rows = 30;
+        this.rows = 15;
         this.ts = 30;  //same as tile.size
     }
 
+    /*
+    Funcion that actually creates the map
+    TODO: rename to createMapOne or something
+    */
     level1()
     {
         var map = 
@@ -38,6 +49,7 @@ class map
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            /*
             [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
@@ -53,8 +65,14 @@ class map
             [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+            */
         ]
 
+        /*
+        Function that creates tiles of the map based on the map 2D array
+        TODO -> create a separate function, so that we can create multiple different maps that use
+                the same function
+        */
         for(var x = 0; x < this.cols; x++)
         {
             var row = [];
@@ -70,10 +88,22 @@ class map
         }
     }
 
+    /*
+    buildSpiral()
+    {
+
+    }
+    */
+
+    /*
+    Helper function to draw the map on the canvas
+    */
     draw(ctx, map)
     {
+        //For each colon (x value) -> vertical 
         for(var x = 0; x < this.cols; x++)
         {
+            //For each row (y value) -> horizontal
             for(var y = 0; y < this.rows; y++)
             {
                 ctx.strokeStyle = "red";
@@ -93,6 +123,9 @@ class map
         }
     }
 
+    /*
+    Helper function that returns a tile of the map with passed in (x,y) coordinates
+    */
     getTile(x, y)
     {
         if(x >= 0 && x < 30 && y >= 0 && y < 30) return this.canvas[x][y];

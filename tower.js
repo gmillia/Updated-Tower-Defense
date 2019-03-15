@@ -1,3 +1,6 @@
+/*
+Class that represents "abstract" tower -> other towers will be derived from this towe
+*/
 class Tower
 {
     constructor(x, y, fireRate, coolDown, color, range, price, damage, name)
@@ -14,6 +17,10 @@ class Tower
         this.name = name;
     }
 
+    /*
+    Helper method that draws the tower AND shoots each enemy in range (sight)
+    TODO -> possibly remake the logic so that shooting is either a different function or happens in the Game.js (main game file⌈)
+    */
     draw(ctx, enemies)
     {
         //draws tower
@@ -45,6 +52,9 @@ class Tower
         }
     }
 
+    /*
+    Helper function that determines if enemy is in the range of the tower⌈
+    */
     inRange(enemy)
     {
         if(enemy.x >= (this.x - (this.range + 1) * 30) && enemy.x <= (this.x + (this.range) * 30) && enemy.y >= (this.y - (this.range + 1) * 30) && enemy.y <= (this.y + (this.range) * 30)) return true;
@@ -52,6 +62,9 @@ class Tower
     }
 }
 
+/*
+New tower type -> less damage/costs less/shoots less frequent
+*/
 class TowerOne extends Tower
 {
     constructor(x,y)
@@ -61,6 +74,9 @@ class TowerOne extends Tower
     }
 }
 
+/*
+New tower type -> more damage/costs more/shoots more frequently
+*/
 class TowerTwo extends Tower
 {
     constructor(x,y)
