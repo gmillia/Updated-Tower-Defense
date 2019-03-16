@@ -283,6 +283,9 @@ function draw()
     //Draw each enemy
     drawEnemies();
 
+    //shoot enemies from the towers
+    shootEnemies();
+
     //Draw each enemy
     drawTowers();
 
@@ -309,6 +312,24 @@ function drawTowers()
     {
         towers[i].draw(ctx, enemies);
         towers[i].coolDown--;
+    }
+}
+
+/*
+Helper function that shoots enemies from towers
+*/
+function shootEnemies()
+{
+    if(playing)
+    {
+        for(var i = 0; i < towers.length; i++)
+        {
+            let tower = towers[i];
+            for(var j = 0; j < enemies.length; j++)
+            {
+                tower.shootEnemy(enemies[j]);
+            }
+        }
     }
 }
 

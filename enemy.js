@@ -14,6 +14,7 @@ class Enemy
         this.alive = true;
         this.health = health;
         this.reward = reward;
+        this.oneHealthBar = Math.round(this.health / this.size);  //Breaks health into 30 pieces (size of the tile)
     }
 
     /*
@@ -25,6 +26,10 @@ class Enemy
         {
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.size, this.size);
+
+            var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
+            ctx.fillStyle = "green";
+            ctx.fillRect(this.x , this.y + 10, this.size + decreaseHealthBar, this.size / 3);  //start x, start y, width, height
         }
     }
 
@@ -82,7 +87,7 @@ class FastWeakEnemy extends Enemy
     constructor()
     {
         //speed, color, health, reward (per kill)
-        super(30, 'brown', 500, 50);
+        super(3, 'brown', 500, 50);
     }
 }
 

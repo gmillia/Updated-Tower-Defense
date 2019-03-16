@@ -19,37 +19,35 @@ class Tower
 
     /*
     Helper method that draws the tower AND shoots each enemy in range (sight)
-    TODO -> possibly remake the logic so that shooting is either a different function or happens in the Game.js (main game file⌈)
     */
-    draw(ctx, enemies)
+    draw(ctx)
     {
-        //draws tower
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.size, this.size);
+    }
 
-        //checkForEnemies(enemies) and shoot (if possible)
-        for(var i = 0; i < enemies.length; i++)
+    /*
+    Helper function that shoots an enemy
+    */
+    shootEnemy(enemy)
+    {
+        if(this.inRange(enemy) && enemy.alive)
         {
-            let enemy = enemies[i];
-
-            if(this.inRange(enemy) && enemy.alive)
+            if(this.coolDown <= 0)
             {
-                if(this.coolDown <= 0)
-                {
-                    //draw line aka bullet
-                    ctx.beginPath();
-                    ctx.moveTo(this.x + 7, this.y + 7);
-                    ctx.lineTo(enemy.x + 15, enemy.y + 15);
-                    ctx.strokeStyle = "red";
-                    ctx.lineWidth = 5;
-                    ctx.stroke();
-                    ctx.lineWidth = 1;
-                    this.coolDown = this.fireRate;
+                //draw line aka bullet
+                ctx.beginPath();
+                ctx.moveTo(this.x + 7, this.y + 7);
+                ctx.lineTo(enemy.x + 15, enemy.y + 15);
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 5;
+                ctx.stroke();
+                ctx.lineWidth = 1;
+                this.coolDown = this.fireRate;
 
-                    enemy.damage(this.damage);
-                }
+                enemy.damage(this.damage);
             }
-        }
+        }       
     }
 
     /*
