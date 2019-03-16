@@ -10,10 +10,12 @@ TODO: Possibly decrease the tile size to fit more enemies/towers;
    OR
    Make random enemies in each wave after 3-4 wave
 4) Restyle the buttons and put them into different sides of the map
+DONE (partially) -> restyle them to look good
 5) Add images for the towers and enemies
 6) Possibly add an image over the canvas with the path, and hardcode the path to follow images path
 7) Wait time for the next wave in seconds (not calls to the draw method)
 8) Add health bar for each enemy
+DONE
 */
 
 //grab canvas
