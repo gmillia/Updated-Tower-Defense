@@ -358,8 +358,9 @@ function drawEnemies()
         }
 
         //Check if enemy reached final destination
-        if(enemies[i].x == 0 && enemies[i].y == 420 && enemies[i].alive && !reachedEnd.includes(i))
+        if(enemies[i].x == 0 && enemies[i].y == 420 && enemies[i].alive) // && enemies[i].alive && !reachedEnd.includes(i))
         {
+            enemies[i].alive = false;
             lives--;  //decrease lives left
             displayLives();  //Display lives left
 
@@ -373,7 +374,7 @@ function drawEnemies()
             }
         }
         //move only if game is not paused
-        else if(playing) enemies[i].move();
+        else if(playing && enemies[i].alive) enemies[i].move();
 
         //If we killed all enemies, clear killed and enemies list -> wave is over
         if((killed.length + reachedEnd.length) >= maxEnemies) 
