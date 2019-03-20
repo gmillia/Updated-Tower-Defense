@@ -1,0 +1,204 @@
+<html>
+    <canvas id = "gameCanvas" height = 450 width = 900></canvas>
+
+    <div id="leftBanner">
+        <button type="button" id="start">Start</button>
+        <button type="button" id="pause">Pause</button>
+        <button type="button" id="towerOne">Tower One</button>
+        <button type="button" id="towerTwo">Tower Two</button>
+    </div> 
+
+    <div id="gameInfo">
+        <b id="money">Money: $1000</b><br>
+        <b id="wave">Wave: 1</b><br>
+        <b id="nextWave">Next Wave In: 0</b><br>
+        <b id="lives">Lives: 10</b><br>
+        <b id="remaining">Remaining Enemies: 25</b>
+    </div>
+
+    <div id="towerInfo">
+        <b id="tower">Tower: </b><br>
+        <b id="price">Price: </b><br>
+        <b id="range">Range: </b><br>
+        <b id="damage">Damage: </b><br>
+        <button type="button" id="sell">Sell</button>
+        <button type="button" id="upgrade">Upgrade</button>
+    </div>
+
+
+    <div id="banner">
+        <b>TOWER DEFENSE</b>
+    </div>
+
+    <div id="rightBanner"></div>
+
+    
+    <style>
+        body
+        {
+            background-color: darkgray;
+        }
+        #leftBanner
+        {
+            position: absolute;
+            width: 130px;
+            height: 462px;
+
+            border: 5px solid rgb(28, 236, 108);
+            border-radius: 5px;
+            background-color: aqua;
+            display: block;
+
+            text-align: center;
+            font-size: 50px;
+            margin-left: auto;
+
+            top: 130px;
+        }
+        #rightBanner
+        {
+            position: absolute;
+            width: 280px;
+            height: 462px;
+
+            border: 5px solid  rgb(28, 236, 108);
+            border-radius: 5px;
+            background-color: aqua;
+            display: block;
+
+            text-align: center;
+            font-size: 50px;
+            margin-left: auto;
+            left: 1052px;
+            top: 130px;
+
+            z-index: 0;
+        }
+        #banner
+        {
+            position: absolute;
+            width: 1315px;
+            height: 100px;
+
+            border: 10px solid blue;
+            border-radius: 5px;
+            background-color: aqua;
+            display: block;
+
+            text-align: center;
+            font-size: 50px;
+            margin-left: auto;
+        }
+        #gameCanvas
+        {
+            border: 1px solid red;
+            position: absolute;
+            left: 150px;
+            top: 150px;
+        }
+        #start
+        {
+            text-align: center;
+            background-color: grey;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            left: 25px;
+        }
+        #pause
+        {
+            text-align: center;
+            background-color: grey;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            top: 60px;
+            left: 25px;
+        }
+        #towerOne
+        {
+            text-align: center;
+            background-color: blue;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            top: 250px;
+            left: 25px;
+        }
+        #towerTwo
+        {
+            text-align: center;
+            background-color: yellow;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            top: 300px;
+            left: 25px;
+        }
+        #gameInfo
+        {
+            position: absolute;
+            top: 150px;
+            left: 1090px;
+            display: block;
+
+            width: 195px;
+            height: 135px;
+            border: 5px solid gray;
+            border-radius: 10px;  
+
+            font-size: 20px;
+            z-index: 1;
+        }
+        #towerInfo
+        {
+            position: absolute;
+            top: 325px;
+            left: 1090px;
+            display: none;
+
+            width: 195px;
+            height: 150px;
+            border: 5px solid gray;
+            border-radius: 10px;
+
+            font-size: 20px;
+            z-index: 1;
+        }
+        #sell
+        {
+            position: absolute;
+            top: 105px;
+            left: 4px;
+
+            text-align: center;
+            background-color: gray;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        #upgrade
+        {
+            position: absolute;
+            top: 105px;
+            left: 70px;
+
+            text-align: center;
+            background-color: gray;
+            font-size: 15px;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+    
+    <script src = "map.js"></script>
+    <script src = "enemy.js"></script>
+    <script src = "bullet.js"></script>
+    <script src = "tower.js"></script>
+    <script src = "shoot.js"></script>
+</html>

@@ -518,6 +518,7 @@ function displayTowerInfo()
     document.getElementById("range").innerHTML = "Range: " + towerRange + " tiles";
     document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
     document.getElementById('sell').style.display = "none";
+    document.getElementById('upgrade').style.display = "none";
     document.getElementById("towerInfo").style.display = "block";
 }
 
@@ -531,6 +532,7 @@ function displaySellInfo()
     document.getElementById("range").innerHTML = "Range: " + towerRange + " tiles";
     document.getElementById("damage").innerHTML = "Damage: " + towerDamage;
     document.getElementById('sell').style.display = "block";
+    document.getElementById('upgrade').style.display = "block";
     document.getElementById("towerInfo").style.display = "block";
 }
 
