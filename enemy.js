@@ -54,15 +54,16 @@ class Enemy
     Helper function that gets called when enemy attempts to move
     Determines next valid move.
     TODO: possibly have different findDirection functions for different maps
+    TODO: do else if instad of ifs for better performance
     */
     findDirection(x,y)
     {
         //Move to the right
         if(x < 870 && (y == 0 || y == 120 || y == 240 || y == 360 || y == 480 || y == 600 || y == 720 || y == 840)) return [x + this.speed, y];
         //Move down on the left side
-        if(x <= 0 && ((y >=60 && y < 120) || (y >= 180 && y < 240) || (y >= 300 && y < 360) || (y >= 420 && y < 480) || (y >= 540 && y < 600) || (y >= 660 && y < 720) || (y >= 780 && y < 840))) return [x, y + this.speed];
+        if(x >= 0 && ((y >=60 && y < 120) || (y >= 180 && y < 240) || (y >= 300 && y < 360) || (y >= 420 && y < 480) || (y >= 540 && y < 600) || (y >= 660 && y < 720) || (y >= 780 && y < 840))) return [x, y + this.speed];
         //Move down on the right side
-        if(x >= 870 && ((y >= 0 && y < 60) || (y >= 120 && y < 180) || (y >= 240 && y < 300) || (y >= 360 && y < 420) || (y >= 480 && y < 540) || (y >= 600 && y < 660) || (y >= 720 && y < 780) || (y >= 840 && y < 870))) return [x, y + this.speed];
+        if(x <= 870 && ((y >= 0 && y < 60) || (y >= 120 && y < 180) || (y >= 240 && y < 300) || (y >= 360 && y < 420) || (y >= 480 && y < 540) || (y >= 600 && y < 660) || (y >= 720 && y < 780) || (y >= 840 && y < 870))) return [x, y + this.speed];
         //Move to the left
         if(x > 0 && (y == 60 || y == 120 || y == 180 || y == 300 || y == 420 || y == 540 || y == 660 || y == 780 || y == 800)) return [x - this.speed, y];
     }
@@ -99,7 +100,7 @@ class SlowStrongEnemy extends Enemy
     constructor()
     {
         //speed, color, health, reward (per kill)
-        super(0.9, 'white', 4000, 100);
+        super(0.5, 'white', 4000, 100);
     }
 }
 
