@@ -25,7 +25,10 @@ class Enemy
         if(this.alive)
         {
             ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.size, this.size);
+            ctx.fillRect(this.x, this.y, this.size-1, this.size-1);
+
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(this.x, this.y, this.size - 1, this.size - 1);
 
             var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
             ctx.fillStyle = "green";
@@ -88,7 +91,7 @@ class FastWeakEnemy extends Enemy
     constructor()
     {
         //speed, color, health, reward (per kill)
-        super(3, 'brown', 500, 50);
+        super(3, 'brown', 500, 25);
     }
 }
 
@@ -100,7 +103,7 @@ class SlowStrongEnemy extends Enemy
     constructor()
     {
         //speed, color, health, reward (per kill)
-        super(0.5, 'white', 4000, 100);
+        super(0.5, 'white', 7000, 100);
     }
 }
 
@@ -111,8 +114,8 @@ class SlowWeakEnemy extends Enemy
 {
     constructor()
     {
-        //speed, color, health
-        super(0.5, 'silver', 300, 100);
+        //speed, color, health, reward (per kill)
+        super(0.5, 'silver', 300, 25);
     }
 }
 
@@ -123,7 +126,7 @@ class FastStrongEnemy extends Enemy
 {
     constructor()
     {
-        //speed, color, health
-        super(1.5, 'purple', 5000, 250)
+        //speed, color, health, reward (per kill)
+        super(1.5, 'purple', 5000, 150)
     }
 }

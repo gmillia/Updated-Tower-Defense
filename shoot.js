@@ -382,17 +382,6 @@ function drawEnemies()
         }
         //move only if game is not paused
         else if(playing && enemies[i].alive) enemies[i].move();
-
-        /*
-        //If we killed all enemies, clear killed and enemies list -> wave is over
-        if((killed.length + reachedEnd.length) >= maxEnemies) 
-        { 
-            //clear lists
-            killed.length = 0; 
-            enemies.length = 0;
-            reachedEnd.length = 0;
-        }
-        */
     }
 
     //If we killed all enemies, clear killed and enemies list -> wave is over
@@ -465,8 +454,10 @@ function drawRange()
     if(towerSelected)
     {
         //Currently blue color for range with opacity 0.5
-        //TODO -> switch color of the range based on whether we are currently on the placable tile
-        ctx.fillStyle = "rgba(27,27,238, 0.5)";
+        var currTile = gameMap.getTile(mouse.x, mouse.y);
+        //console.log(Math.floor(mouse.x), Math.floor(mouse.y));
+        if(currTile.placable) ctx.fillStyle = "rgba(207, 0, 15, 0.5)";
+        else ctx.fillStyle = "rgba(27,27,238, 0.5)";
 
         //Find appropriate tiles (next to tower) that are in range and draw range over them (with opacity)
         for(var i = -towerRange; i < towerRange + 1; i++)

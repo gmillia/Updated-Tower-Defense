@@ -51,10 +51,12 @@ class Tower
     }
 
     /*
-    Helper function that determines if enemy is in the range of the tower⌈
+    Helper function that determines if enemy is in the range of the tower
+    30 = size of the tile
     */
     inRange(enemy)
     {
+        //+1 lets us calculate position based on the right side of the enemy entrance (instead of left side)
         if(enemy.x >= (this.x - (this.range + 1) * 30) && enemy.x <= (this.x + (this.range) * 30) && enemy.y >= (this.y - (this.range + 1) * 30) && enemy.y <= (this.y + (this.range) * 30)) return true;
         else return false;
     }
@@ -67,8 +69,8 @@ class TowerOne extends Tower
 {
     constructor(x,y)
     {
-        //x, y, fireRate, coolDown, range, price, damage
-        super(x, y, 50, 0, "blue", 1, 25, 150, "Tower One");
+        //x, y, fireRate, coolDown, color, range, price, damage, name
+        super(x, y, 50, 0, "blue", 1, 150, 150, "Tower One");
     }
 }
 
@@ -79,7 +81,7 @@ class TowerTwo extends Tower
 {
     constructor(x,y)
     {
-        //x, y, fireRate, coolDown, range, price, damage
-        super(x, y, 30, 0, "orange", 2, 50, 250, "Tower Two");
+        //x, y, fireRate, coolDown, color, range, price, damage, name
+        super(x, y, 30, 0, "orange", 2, 300, 250, "Tower Two");
     }
 }
