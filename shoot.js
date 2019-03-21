@@ -9,13 +9,20 @@ TODO: Possibly decrease the tile size to fit more enemies/towers;
 3) Make enemies spawn into different lists -> this way we can have multiple enemies per wave 
    OR
    Make random enemies in each wave after 3-4 wave
+   DONE (partially) -> need to adjust so that enemies get stronger each round (or they already spanw faster/more)
 4) Restyle the buttons and put them into different sides of the map
-DONE (partially) -> restyle them to look good
+DONE (partially) -> restyle them to look good -> DONE (partially)
 5) Add images for the towers and enemies
 6) Possibly add an image over the canvas with the path, and hardcode the path to follow images path
 7) Wait time for the next wave in seconds (not calls to the draw method)
 8) Add health bar for each enemy
 DONE
+
+Problems: 
+1) SlowStrongEnemy is getting stuck on the first row -> moving only works with 0.5 increments in speed -> needs fixing
+DONE -> Issue was in the hardcoded move values == 870 instead of >= 870
+2) Appropriate money vals for killed enemies + start money
+3) Towers are shooting out of range -> need to adjust tiles
 */
 
 //grab canvas
@@ -376,6 +383,7 @@ function drawEnemies()
         //move only if game is not paused
         else if(playing && enemies[i].alive) enemies[i].move();
 
+        /*
         //If we killed all enemies, clear killed and enemies list -> wave is over
         if((killed.length + reachedEnd.length) >= maxEnemies) 
         { 
@@ -384,6 +392,16 @@ function drawEnemies()
             enemies.length = 0;
             reachedEnd.length = 0;
         }
+        */
+    }
+
+    //If we killed all enemies, clear killed and enemies list -> wave is over
+    if((killed.length + reachedEnd.length) >= maxEnemies) 
+    { 
+        //clear lists
+        killed.length = 0; 
+        enemies.length = 0;
+        reachedEnd.length = 0;
     }
 }
 
@@ -413,7 +431,7 @@ function addEnemies()
     //Case 1: Time to spawn enemy
     if(enemyCoolDown <= 0 && enemyCount < maxEnemies)
     {
-        enemies[enemyCount] = new FastWeakEnemy();  //TODO -> change so that random enemies are spawned each turn
+        randomEnemy(Math.floor(Math.random() * 4));
         enemyCount++;  //increase current enemy count
         enemyCoolDown = maxCool;  //reset current coolDown
         enemyCoolDown--;  //decrease enemyCoolDOwn by 1 each call
@@ -421,6 +439,20 @@ function addEnemies()
     //Case 2: Not time to spawn enemy -> decrease wait time for the next enemy spawn
     else
         enemyCoolDown--;
+}
+
+/*
+Helper function to addEnemies that will choose enemy based on it's type (type is an int that will be randomly chosen)
+*/
+function randomEnemy(kind)
+{
+    var newEnemy = null;
+    if(kind == 0) newEnemy = new FastWeakEnemy();
+    else if(kind == 1) newEnemy = new SlowStrongEnemy();
+    else if(kind == 2) newEnemy = new SlowWeakEnemy();
+    else if(kind == 3) newEnemy = new FastStrongEnemy();
+
+    enemies[enemyCount] = newEnemy;
 }
 
 /*
