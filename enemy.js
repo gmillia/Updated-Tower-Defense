@@ -39,18 +39,16 @@ class Enemy
 
             //Circle enemies
             ctx.beginPath();
-            ctx.arc(this.x + 15, this.y + 15, 10, 0, 2 * Math.PI);
+            ctx.arc(this.x + 15, this.y + 15, 7, 0, 2 * Math.PI);
             ctx.fillStyle = this.color;
             ctx.fill();
 
             var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
             ctx.fillStyle = "red";
-            ctx.fillRect(this.x + 5, this.y + 20, (this.size + decreaseHealthBar) - 10, this.size / 7);  //start x, start y, width, height
+            ctx.fillRect(this.x + 7, this.y + 23, (this.size + decreaseHealthBar) - 15, this.size / 9);  //start x, start y, width, height
 
             ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(this.x + 5, this.y + 20, this.size - 10, this.size / 7);  //start x, start y, width, height
-            ctx.lineWidth = 1;
+            ctx.strokeRect(this.x + 7, this.y + 23, this.size - 15, this.size / 9);  //start x, start y, width, height
         }
     }
 
