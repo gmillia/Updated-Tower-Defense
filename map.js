@@ -111,7 +111,7 @@ class map
     
                 if(map.getTile(x,y).placable)
                 {
-                    ctx.fillStyle = "rgb(106,90,205)";
+                    ctx.fillStyle = "rgb(160,82,45)";
                     ctx.fillRect(x * 30, y * 30, 30, 30);
                 }
                 else
