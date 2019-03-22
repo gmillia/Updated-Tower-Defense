@@ -106,12 +106,12 @@ class map
             //For each row (y value) -> horizontal
             for(var y = 0; y < this.rows; y++)
             {
-                ctx.strokeStyle = "red";
+                ctx.strokeStyle = "gray";
                 ctx.strokeRect(x*this.ts, y*this.ts, this.ts, this.ts);
     
                 if(map.getTile(x,y).placable)
                 {
-                    ctx.fillStyle = "green";
+                    ctx.fillStyle = "rgb(106,90,205)";
                     ctx.fillRect(x * 30, y * 30, 30, 30);
                 }
                 else

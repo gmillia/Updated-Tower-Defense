@@ -23,7 +23,7 @@ class Tower
     draw(ctx)
     {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.fillRect(this.x, this.y, this.size-1, this.size-1);
 
         ctx.strokeStyle = "white";
         ctx.strokeRect(this.x, this.y, this.size - 1, this.size - 1);
