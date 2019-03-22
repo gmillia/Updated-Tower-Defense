@@ -24,6 +24,8 @@ class Enemy
     {
         if(this.alive)
         {
+            //Square enemies
+            /*
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.size-1, this.size-1);
 
@@ -33,6 +35,22 @@ class Enemy
 
             ctx.strokeStyle = "white";
             ctx.strokeRect(this.x, this.y, this.size - 1, this.size - 1);
+            */
+
+            //Circle enemies
+            ctx.beginPath();
+            ctx.arc(this.x + 15, this.y + 15, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+
+            var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
+            ctx.fillStyle = "red";
+            ctx.fillRect(this.x, this.y + 20, this.size + decreaseHealthBar, this.size / 5);  //start x, start y, width, height
+            
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(this.x, this.y + 20, this.size, this.size / 5);
+            ctx.lineWidth = 1;
         }
     }
 
