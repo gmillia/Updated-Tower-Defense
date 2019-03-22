@@ -27,12 +27,12 @@ class Enemy
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.size-1, this.size-1);
 
-            ctx.strokeStyle = "white";
-            ctx.strokeRect(this.x, this.y, this.size - 1, this.size - 1);
-
             var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
             ctx.fillStyle = "green";
             ctx.fillRect(this.x , this.y + 10, this.size + decreaseHealthBar, this.size / 3);  //start x, start y, width, height
+
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(this.x, this.y, this.size - 1, this.size - 1);
         }
     }
 
