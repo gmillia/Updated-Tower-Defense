@@ -14,7 +14,7 @@ class Enemy
         this.alive = true;
         this.health = health;
         this.reward = reward;
-        this.oneHealthBar = Math.round(this.health / this.size);  //Breaks health into 30 pieces (size of the tile)
+        this.oneHealthBar = Math.round(this.health / 14);//this.size);  //Breaks health into 30 pieces (size of the tile)
     }
 
     /*
@@ -43,9 +43,9 @@ class Enemy
             ctx.fillStyle = this.color;
             ctx.fill();
 
-            var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 30;  //calculates how much health is left
+            var decreaseHealthBar = Math.round(this.health / this.oneHealthBar) - 14;  //calculates how much health is left
             ctx.fillStyle = "red";
-            ctx.fillRect(this.x + 7, this.y + 23, (this.size + decreaseHealthBar) - 15, this.size / 9);  //start x, start y, width, height
+            ctx.fillRect(this.x + 7, this.y + 23, (this.size + decreaseHealthBar - 15), this.size / 9);  //start x, start y, width, height
 
             ctx.strokeStyle = "white";
             ctx.strokeRect(this.x + 7, this.y + 23, this.size - 15, this.size / 9);  //start x, start y, width, height
